@@ -15,12 +15,12 @@
   ],
   "scripts": {
     "add-ios": "npx cap add ios",
+    "run-ios": "cap run ios",
     "lint": "gulp lint",
     "dist": "gulp dist",
     "build": "gulp build",
     "ionic:build": "gulp build",
-    "start": "gulp",
-    "ios": "cap run ios"
+    "start": "gulp"
   },
   "dependencies": {
     "@capacitor/core": "next",
