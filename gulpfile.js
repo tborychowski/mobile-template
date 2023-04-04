@@ -34,17 +34,7 @@ const PATHS = {
 		OUT: 'index.css',
 	},
 	DIST: 'dist/',
-	OTHER: [
-		'src/assets/*.{svg,png,ico,json}',
-		'node_modules/@ionic/core/css/core.css',
-		'node_modules/@ionic/core/css/core.css.map',
-		'node_modules/@ionic/core/css/normalize.css',
-		'node_modules/@ionic/core/css/normalize.css.map',
-		'node_modules/@ionic/core/css/structure.css',
-		'node_modules/@ionic/core/css/structure.css.map',
-		'node_modules/@ionic/core/css/typography.css',
-		'node_modules/@ionic/core/css/typography.css.map',
-	]
+	OTHER: ['src/assets/*.{svg,png,ico,json}']
 };
 
 
