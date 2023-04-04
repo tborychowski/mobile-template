@@ -1,23 +1,24 @@
+import { createGulpEsbuild } from 'gulp-esbuild';
+import { default as throught2 } from 'through2';
 import { deleteAsync } from 'del';
-import gulp from 'gulp';
 import cleanCSS from 'gulp-clean-css';
 import concat from 'gulp-concat';
-import livereload from 'gulp-livereload';
-import { default as throught2 } from 'through2';
-import NodeResolve from '@esbuild-plugins/node-resolve';
-import gulpStylelint from '@ronilaukkarinen/gulp-stylelint';
-import sveltePlugin from 'esbuild-svelte';
-import { createGulpEsbuild } from 'gulp-esbuild';
-import inject from 'gulp-inject-string';
+import gulp from 'gulp';
 // eslint-disable-next-line import/no-unresolved
 import gulpEslint from 'gulp-eslint-new';
+import gulpStylelint from '@ronilaukkarinen/gulp-stylelint';
+import inject from 'gulp-inject-string';
+import livereload from 'gulp-livereload';
+import NodeResolve from '@esbuild-plugins/node-resolve';
+import server from 'gulp-webserver';
+import sveltePlugin from 'esbuild-svelte';
+
 
 const { src, dest, watch, series, parallel } = gulp;
 const noop = throught2.obj;
-
+let isProd = false;
 let gulpEsbuild = createGulpEsbuild({ incremental: false });
 
-let isProd = false;
 const setProd = (done) => { isProd = true; done(); };
 const cleanup = () => deleteAsync([PATHS.DIST + '/*']);
 
@@ -111,6 +112,7 @@ export function css () {
 		.pipe(livereload());
 }
 
+
 export function stylelint () {
 	return src(PATHS.CSS.ALL)
 		.pipe(gulpStylelint({
@@ -120,6 +122,11 @@ export function stylelint () {
 			console.log('\x07');           // beep
 			this.emit('end');
 		});
+}
+
+
+function serveTask () {
+	return src(PATHS.DIST).pipe(server({ livereload: false, open: true, port: 3123, }));
 }
 
 
@@ -136,6 +143,6 @@ function watchTask (done) {
 
 
 export const lint = parallel(eslint, stylelint);
-export const build = series(cleanup, js, parallel(css, html, assets, lint));
+export const build = series(cleanup, parallel(js, css, html, assets, lint));
 export const dist = series(setProd, build);
-export default series(build, watchTask);
+export default parallel(watchTask, series(build, serveTask));
